@@ -50,6 +50,15 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
+        // 1. 先に管理者「アース様」を作成する
+        User::create([
+            'name' => 'アース様（管理者）',
+            'email' => '0@0', // 超覚えやすいメアド
+            'password' => Hash::make('12345678'),
+            'email_verified_at' => now(),
+            'is_admin' => true, 
+        ]);
+
         foreach ($heroTasks as $heroName => $tasks) {
             // 前回のメアド規則をそのまま採用 (1@1, 2@2...)
             static $num = 1;

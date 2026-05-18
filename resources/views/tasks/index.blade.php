@@ -22,6 +22,10 @@
                 <table style="width: 100%; border-collapse: collapse; text-align: left;">
                     <thead>
                         <tr style="border-bottom: 2px solid #E5E7EB; background-color: #F9FAFB;">
+                            @if(auth()->user()->is_admin)
+                            <th style="padding: 12px;">担当ヒーロー</th>
+                            @endif
+
                             <th style="padding: 12px;">タスク名</th>
                             <th style="padding: 12px;">ステータス</th>
                             <th style="padding: 12px;">期限日</th>
@@ -29,10 +33,17 @@
                         </tr>
                     </thead>
                     <tbody>
+                    <tbody>
                         @foreach ($tasks as $task)
                         <tr style="border-bottom: 1px solid #E5E7EB;">
+                            @if(auth()->user()->is_admin)
+                            <td style="padding: 12px; font-weight: bold; color: #4F46E5;">
+                                {{ $task->user->name }}
+                            </td>
+                            @endif
+
                             <td style="padding: 12px;">
-                                <a href="{{ route('tasks.show', $task) }}" style="color: #2563EB; font-weight: bold; hover:underline;">
+                                <a href="{{ route('tasks.show', $task) }}" style="color: #2563EB; font-weight: bold;">
                                     {{ $task->title }}
                                 </a>
                             </td>
