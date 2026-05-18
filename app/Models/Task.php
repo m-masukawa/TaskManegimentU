@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;//モデル
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Task extends Model
