@@ -10,18 +10,41 @@ class TaskController extends Controller
 
     public function index(Request $request)
     {
-        $this->authorize('viewAny', Task::class);
-
-        // ログインユーザーを取得
-        $user = $request->user();
-
-        if ($user->is_admin) {
-            // ⭐管理者の場合は、全ユーザーのタスクを最新順に取得する
-            $tasks = Task::with('user')->latest()->paginate(10);
+        // is_admin が true
+        if ($request->user()->is_admin) {
+            // 管理者用
+            $query = Task::query();
         } else {
-            // 一般ユーザーの場合は、自分のタスクだけ取得する（元のコード）
-            $tasks = $user->tasks()->latest()->paginate(10);
+            // 一般ユーザーの場合は、自分のタスクだけを対象にする
+            $query = $request->user()->tasks();
         }
+
+        // 2. キーワード検索（タスクのタイトル・説明 ＋ ユーザー名も対象に！）
+        if ($request->filled('keyword')) {
+            $keyword = $request->input('keyword');
+
+            $query->where(function ($q) use ($keyword) {
+                // ① タスクのタイトルで検索
+                $q->where('title', 'like', '%' . $keyword . '%')
+                    // ② タスクの詳細説明で検索
+                    ->orWhere('description', 'like', '%' . $keyword . '%')
+                    // ③ リレーション先（usersテーブル）のnameで検索
+                    ->orWhereHas('user', function ($userQuery) use ($keyword) {
+                        $userQuery->where('name', 'like', '%' . $keyword . '%');
+                    });
+            });
+        }
+
+        // 絞り込み
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        // 並び替え
+        $tasks = $query->latest()
+            ->paginate(10)
+            // クエリパラメータ維持のため withQueryString()
+            ->withQueryString();
 
         return view('tasks.index', compact('tasks'));
     }
