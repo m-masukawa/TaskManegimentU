@@ -6,7 +6,7 @@
     <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                
+
                 <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #E5E7EB; padding-bottom: 10px;">
                     {{ $task->title }}
                 </h3>
@@ -34,7 +34,9 @@
 
                 <div style="display: flex; gap: 15px;">
                     <a href="{{ route('tasks.index') }}" style="color: #6B7280; border: 1px solid #D1M5DB; padding: 8px 16px; border-radius: 5px;">一覧へ戻る</a>
+                    @can('update', $task)
                     <a href="{{ route('tasks.edit', $task) }}" style="background-color: #10B981; color: white; padding: 8px 16px; border-radius: 5px;">このタスクを編集</a>
+                    @endcan
                 </div>
 
             </div>

@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             '仮面ライダーV3' => [
                 ['title' => 'デストロンの怪人ハサミジャガー捜索', 'description' => '少年仮面ライダー隊からの目撃情報を元に、アジトを特定する。バイクの整備を忘れずに。', 'status' => 'todo'],
                 ['title' => 'V3ホッパーによる上空偵察', 'description' => '新型ロケット爆弾の輸送ルートを空から追跡する。', 'status' => 'doing'],
-                ['title' => 'ライダー43の特殊能力の特訓', 'description' => '逆ダブルタイフーンのエネルギー消費量と、使用後のスキを検証する。', 'status' => 'done'],
+                ['title' => 'ライダーV3の特殊能力の特訓', 'description' => '逆ダブルタイフーンのエネルギー消費量と、使用後のスキを検証する。', 'status' => 'done'],
             ],
             'キカイダー' => [
                 ['title' => 'ダーク破壊部隊のギルハカイダーを阻止', 'description' => 'プロフェッサー・ギルの悪魔の笛の音が聞こえたら、良心回路をフル稼働して耐える。', 'status' => 'todo'],
@@ -49,6 +49,15 @@ class DatabaseSeeder extends Seeder
                 ['title' => '葉山博士のメッセージ解読', 'description' => '宇宙から届いた超微弱な電波をノイズキャンセラーで補正。', 'status' => 'done'],
             ],
         ];
+
+        // 1. 先に管理者「アース様」を作成する
+        User::create([
+            'name' => 'アース様（管理者）',
+            'email' => '0@0', // 超覚えやすいメアド
+            'password' => Hash::make('12345678'),
+            'email_verified_at' => now(),
+            'is_admin' => true, 
+        ]);
 
         foreach ($heroTasks as $heroName => $tasks) {
             // 前回のメアド規則をそのまま採用 (1@1, 2@2...)

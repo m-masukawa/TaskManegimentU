@@ -10,13 +10,18 @@ class TaskController extends Controller
 
     public function index(Request $request)
     {
-        $this->authorize('viewAny', Task::class); // 認可
+        $this->authorize('viewAny', Task::class);
 
-        // 一覧取得を自分のタスクだけにする
-        $tasks = $request->user()
-            ->tasks()
-            ->latest()
-            ->paginate(10);
+        // ログインユーザーを取得
+        $user = $request->user();
+
+        if ($user->is_admin) {
+            // ⭐管理者の場合は、全ユーザーのタスクを最新順に取得する
+            $tasks = Task::with('user')->latest()->paginate(10);
+        } else {
+            // 一般ユーザーの場合は、自分のタスクだけ取得する（元のコード）
+            $tasks = $user->tasks()->latest()->paginate(10);
+        }
 
         return view('tasks.index', compact('tasks'));
     }
