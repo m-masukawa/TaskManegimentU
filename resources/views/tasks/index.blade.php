@@ -64,6 +64,9 @@
                             <th style="padding: 12px;">タスク名</th>
                             <th style="padding: 12px;">ステータス</th>
                             <th style="padding: 12px;">期限日</th>
+
+                            <th style="padding: 12px;">特命遂行者</th>
+
                             <th style="padding: 12px;">操作</th>
                         </tr>
                     </thead>
@@ -81,26 +84,39 @@
                                     {{ $task->title }}
                                 </a>
                             </td>
+
                             <td style="padding: 12px;">
                                 <span style="padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;
-                                            background-color: {{ $task->status === 'done' ? '#D1FAE5' : ($task->status === 'doing' ? '#FEF3C7' : '#E5E7EB') }};
-                                            color: {{ $task->status === 'done' ? '#065F46' : ($task->status === 'doing' ? '#92400E' : '#374151') }};">
+                        background-color: {{ $task->status === 'done' ? '#D1FAE5' : ($task->status === 'doing' ? '#FEF3C7' : '#E5E7EB') }};
+                        color: {{ $task->status === 'done' ? '#065F46' : ($task->status === 'doing' ? '#92400E' : '#374151') }};">
                                     {{ $task->status }}
                                 </span>
                             </td>
+
                             <td style="padding: 12px; color: #4B5563;">
                                 {{ $task->due_date ?? '未設定' }}
                             </td>
+
+                            <td style="padding: 12px;">
+                                @if($task->assignee)
+                                <span style="background-color: #e2e8f0; color: #4a5568; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px;">
+                                    {{ $task->assignee->name }}
+                                </span>
+                                @else
+                                <span style="color: #a0aec0; font-style: italic; font-size: 12px;">待機中</span>
+                                @endif
+                            </td>
+
                             <td style="padding: 12px; display: flex; gap: 10px;">
                                 @can('update', $task)
                                 <a href="{{ route('tasks.edit', $task) }}" style="color: #10B981; font-size: 14px;">編集</a>
                                 @endcan
 
                                 @can('delete', $task)
-                                <form action="{{ route('tasks.destroy', $task) }}" method="POST">
+                                <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="margin: 0;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" style="color: #EF4444; font-size: 14px;" onclick="return confirm('本当に削除しますか？')">削除</button>
+                                    <button type="submit" style="color: #EF4444; font-size: 14px; background: none; border: none; padding: 0; cursor: pointer;" onclick="return confirm('本当に削除しますか？')">削除</button>
                                 </form>
                                 @endcan
                             </td>
