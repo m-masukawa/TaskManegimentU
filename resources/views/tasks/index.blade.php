@@ -5,7 +5,6 @@
             <a href="{{ route('tasks.create') }}" style="background-color: #4F46E5; color: white; padding: 8px 16px; border-radius: 5px; font-size: 14px;">新規作成</a>
         </div>
     </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
@@ -14,6 +13,42 @@
                 {{ session('success') }}
             </div>
             @endif
+
+            <div class="search-filter-section" style="margin-bottom: 20px; padding: 15px; background-color: #f5f5f5; border-radius: 5px;">
+                <form method="GET" action="{{ route('tasks.index') }}" style="display: flex; gap: 10px; align-items: flex-end;">
+
+                    <div>
+                        <label for="keyword" style="font-weight: bold; display: block; margin-bottom: 5px;">キーワード</label>
+                        <input
+                            type="text"
+                            id="keyword"
+                            name="keyword"
+                            value="{{ request('keyword') }}"
+                            placeholder="タイトル・説明から検索"
+                            style="padding: 6px 12px; width: 200px; height: 36px;">
+                    </div>
+
+                    <div>
+                        <label for="status" style="font-weight: bold; display: block; margin-bottom: 5px;">ステータス</label>
+                        <select id="status" name="status" style="padding: 6px 12px; width: 200px; height: 36px;">
+                            <option value="">すべて</option>
+                            <option value="todo" @selected(request('status')==='todo' )>未着手</option>
+                            <option value="doing" @selected(request('status')==='doing' )>進行中</option>
+                            <option value="done" @selected(request('status')==='done' )>完了</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <button type="submit" style="padding: 6px 24px; height: 36px; background-color: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer;">
+                            検索・絞り込み
+                        </button>
+
+                        <a href="{{ route('tasks.index') }}" style="margin-left: 5px; font-size: 0.9em; color: #666; text-decoration: none;">
+                            クリア
+                        </a>
+                    </div>
+                </form>
+            </div>
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 @if($tasks->isEmpty())
