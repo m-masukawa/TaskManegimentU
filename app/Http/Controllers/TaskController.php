@@ -84,8 +84,13 @@ class TaskController extends Controller
             $assignedUser = User::find($request->input('assigned_to'));
 
             if ($assignedUser && $assignedUser->is_admin) {
+                // 名前を動的に取得
+                $attackerName = $request->user()->name;
+
                 // 強制的にエラーを返す
-                return back()->withErrors(['assigned_to' => '「私は地球の創造主アースである。マグマ大使よ、私に命令を下すとは100年早い！…いや、1億年早い！」'])->withInput();
+                return back()->withErrors([
+                    'assigned_to' => "「私は地球の創造主アースである。{$attackerName}よ、私に命令を下すとは100年早い！…いや、1億年早い！」"
+                ])->withInput();
             }
         }
 
@@ -123,14 +128,28 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         // Policy等による認可チェック
+        $this->authorize('update', $task);
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|string',
             'due_date' => 'nullable|date',
-            'assigned_to' => 'nullable|exists:users,id', 
+            'assigned_to' => 'nullable|exists:users,id',
         ]);
+
+        if (!$request->user()->is_admin && $request->filled('assigned_to')) {
+            $assignedUser = User::find($request->input('assigned_to'));
+
+            if ($assignedUser && $assignedUser->is_admin) {
+                // 名前を取得
+                $attackerName = $request->user()->name;
+
+                return back()->withErrors([
+                    'assigned_to' => "「私は地球の創造主アースである。{$attackerName}よ、私に命令を下すとは100年早い！…いや、1億年早い！」"
+                ])->withInput();
+            }
+        }
 
         $task->update($validated);
 
