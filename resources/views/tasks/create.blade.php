@@ -51,16 +51,15 @@
 
 @if ($errors->has('assigned_to'))
     <style>
-        /* 1. 画面全体を一瞬ブルーホワイトに激しく明滅させる雷の定義 */
         @keyframes thunder-lightning {
             0%, 20%, 40%, 60%, 100% { background-color: transparent; opacity: 0; }
             10%, 14% { background-color: #e0f2fe; opacity: 0.9; } /* 1発目の雷 */
             12%      { background-color: #ffffff; opacity: 1; }
-            50%, 54% { background-color: #bae6fd; opacity: 0.8; } /* 2発目の雷（追撃） */
+            50%, 54% { background-color: #bae6fd; opacity: 0.8; } /* 2発目の雷 */
             52%      { background-color: #ffffff; opacity: 1; }
         }
 
-        /* 2. アース様の怒りで画面全体をガタガタ激しく揺らす定義（アース・シェイク） */
+        /* アース様の怒り */
         @keyframes earth-shake {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
             10% { transform: translate(-5px, 5px) rotate(-1deg); }
@@ -73,7 +72,7 @@
             80% { transform: translate(5px, 5px) rotate(1deg); }
         }
 
-        /* 雷のレイヤー（時間を1.5秒に延ばして存在感をアップ） */
+        /* 雷のレイヤー */
         .lightning-overlay {
             position: fixed;
             top: 0;
@@ -85,7 +84,7 @@
             animation: thunder-lightning 1.5s ease-in-out;
         }
 
-        /* 画面全体を揺らすためのクラス（フォームを囲む要素などに自動適用） */
+        /* 画面全体を揺らすためのクラス */
         body {
             animation: earth-shake 1.2s ease-in-out;
         }
