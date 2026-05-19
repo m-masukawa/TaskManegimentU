@@ -33,7 +33,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <tbody>
                         @foreach ($tasks as $task)
                         <tr style="border-bottom: 1px solid #E5E7EB;">
                             @if(auth()->user()->is_admin)
